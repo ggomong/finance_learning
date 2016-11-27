@@ -3,10 +3,11 @@ import sqlite3 as sql
 import tensorflow as tf
 import numpy as np
 import random as rand
-import ptvsd
 
-ptvsd.enable_attach(secret=None)
-ptvsd.wait_for_attach()
+# for visual studio debug
+#import ptvsd
+#ptvsd.enable_attach(secret=None)
+#ptvsd.wait_for_attach()
 
 # configuration
 #                               O * W + b -> 3 labels for each time series, O[? 7], W[7 3], B[3]
@@ -30,8 +31,8 @@ time_step_size = 60
 label_size = 3
 evaluate_size = 3
 
-batch_size = 250
-test_size = 1000 - batch_size
+batch_size = 12500
+test_size = 50000 - batch_size
 
 def init_weights(shape):
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
@@ -112,10 +113,8 @@ def read_data():
     return trX, trY, teX, teY
 
 trX, trY, teX, teY = read_data()
-trX = trX.reshape(-1, time_step_size)
-teX = teX.reshape(-1, time_step_size)
 
-X = tf.placeholder("float", [None, input_vec_size])
+X = tf.placeholder("float", [None, time_step_size, input_vec_size])
 Y = tf.placeholder("float", [None, label_size])
 
 # get lstm_size and output 2 labels
