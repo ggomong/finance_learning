@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "store_modules", "store_modules", "{5925CD8F-F050-4993-813C-42FC86B54372}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "learning_modules", "learning_modules", "{BCF59DB3-DDDB-4A70-B046-9CA0BFE2DCED}"
+	ProjectSection(SolutionItems) = preProject
+		learning_modules\stock_daily_learning\stock_daily_learning.py = learning_modules\stock_daily_learning\stock_daily_learning.py
+	EndProjectSection
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "store_stock_daily_series", "store_modules\store_stock_daily_series\store_stock_daily_series.pyproj", "{F149865E-8A8C-4B70-BD62-E0C50127E548}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3A29E7F8-8918-410F-B930-CBE7AA5E11D7}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "test", "test\test.pyproj", "{81CE2905-80E5-4EE0-9FF8-D2E4768CE75E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F149865E-8A8C-4B70-BD62-E0C50127E548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F149865E-8A8C-4B70-BD62-E0C50127E548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CE2905-80E5-4EE0-9FF8-D2E4768CE75E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CE2905-80E5-4EE0-9FF8-D2E4768CE75E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F149865E-8A8C-4B70-BD62-E0C50127E548} = {5925CD8F-F050-4993-813C-42FC86B54372}
+		{81CE2905-80E5-4EE0-9FF8-D2E4768CE75E} = {3A29E7F8-8918-410F-B930-CBE7AA5E11D7}
+	EndGlobalSection
+EndGlobal
