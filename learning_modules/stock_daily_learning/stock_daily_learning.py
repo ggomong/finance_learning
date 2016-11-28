@@ -79,9 +79,9 @@ def read_random_data(conn, codes, dates, keys, size):
         min = price;
 
         for item in items[-evaluate_size:]:
-            if item[1] < max:
+            if max < item[1]:
                 max = item[1]
-            if item[2] > min:
+            if item[2] < min:
                 min = item[2]
 
         if (min - price) / price < -0.02:
