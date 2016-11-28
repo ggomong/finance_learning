@@ -2,7 +2,6 @@
 import sqlite3 as sql
 import tensorflow as tf
 import numpy as np
-import random as rand
 
 # for visual studio debug
 #import ptvsd
@@ -31,8 +30,9 @@ time_step_size = 60
 label_size = 3
 evaluate_size = 3
 
-batch_size = 12500
-test_size = 50000 - batch_size
+total_size = 600000
+batch_size = 150000
+test_size = total_size - batch_size
 
 def init_weights(shape):
     return tf.Variable(tf.random_normal(shape, stddev=0.01))
@@ -56,21 +56,14 @@ def model(X, W, B, lstm_size):
     # Get the last output
     return tf.matmul(outputs[-1], W) + B, lstm.state_size # State size to initialize the stat
 
-def read_random_data(conn, codes, dates, keys, size):
+def read_series_datas(conn, code_dates):
     X = list()
     Y = list()
 
-    while (len(keys) < size):
-        code = rand.choice(codes)[0]
-        date = rand.choice(dates)[0]
-        key = (code, date)
-        if key in keys:
-            continue
-        keys.add(key)
-
+    for code_date in code_dates:
         cursor = conn.cursor()
-        cursor.execute("SELECT open, high, low, close, volume, hold_foreign, st_purchase_inst FROM stock_daily_series WHERE code = '{0}' AND date >= '{1}' ORDER BY date LIMIT {2}".format(code, date, time_step_size + evaluate_size))
-        items = cursor.fetchall();
+        cursor.execute("SELECT open, high, low, close, volume, hold_foreign, st_purchase_inst FROM stock_daily_series WHERE code = '{0}' AND date >= '{1}' ORDER BY date LIMIT {2}".format(code_date[0], code_date[1], time_step_size + evaluate_size))
+        items = cursor.fetchall()
 
         X.append(np.array(items[:time_step_size]))
 
@@ -93,11 +86,9 @@ def read_random_data(conn, codes, dates, keys, size):
             
     return np.array(X), np.array(Y)
 
-def read_data():
+def read_datas():
     conn = sql.connect("../../databases/finance_learning.db")
     with conn:
-        rand.seed()
-
         cursor = conn.cursor()
         cursor.execute("SELECT DISTINCT code FROM stock_daily_series")
         codes = cursor.fetchall()
@@ -106,13 +97,27 @@ def read_data():
         cursor.execute("SELECT DISTINCT date FROM stock_daily_series ORDER BY date")
         dates = cursor.fetchall()[:-(time_step_size + evaluate_size)]
 
-        keys = set()
-        trX, trY = read_random_data(conn, codes, dates, keys, batch_size)
-        teX, teY = read_random_data(conn, codes, dates, keys, test_size)
+        cnt = total_size
+        code_dates = list()
+        for date in dates:
+            for code in codes:
+                code_dates.append((code[0], date[0]))
+                if --cnt <= 0:
+                    break
+            if --cnt <= 0:
+                break
+
+        np.random.seed()
+        np.random.shuffle(code_dates)
+
+        trX = list()
+        trY = list()
+        trX, trY = read_series_datas(conn, code_dates[:batch_size])
+        teX, teY = read_series_datas(conn, code_dates[-test_size:])
 
     return trX, trY, teX, teY
 
-trX, trY, teX, teY = read_data()
+trX, trY, teX, teY = read_datas()
 
 X = tf.placeholder("float", [None, time_step_size, input_vec_size])
 Y = tf.placeholder("float", [None, label_size])
