@@ -67,6 +67,4 @@ with conn:
         while stock_chart.Continue:
             if stock_chart.BlockRequest() != 0 or stock_chart.GetDibStatus() != 0: # 오류시
                 continue
-
             save_data(conn, code, stock_chart)
-

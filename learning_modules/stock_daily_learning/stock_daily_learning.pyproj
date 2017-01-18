@@ -3,18 +3,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>f149865e-8a8c-4b70-bd62-e0c50127e548</ProjectGuid>
-    <ProjectHome>
-    </ProjectHome>
-    <StartupFile>store_stock_daily_series.py</StartupFile>
+    <ProjectGuid>cd5b3791-aa01-4387-a18a-618cf8e91f68</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>stock_daily_learning.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>store_stock_daily_series</Name>
-    <RootNamespace>receive_stock_daily_series</RootNamespace>
+    <Name>stock_daily_learning</Name>
+    <RootNamespace>stock_daily_learning</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterId>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</InterpreterId>
     <InterpreterVersion>3.5</InterpreterVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -26,10 +25,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="store_stock_daily_series.py" />
+    <Compile Include="stock_daily_learning.py" />
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\3.5" />
+    <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\3.5" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
