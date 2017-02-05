@@ -61,3 +61,6 @@ databases/
 
 # Visual Studio
 .vs/
+.vscode/
+*.sln
+*.pyproj
