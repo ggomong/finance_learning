@@ -1,4 +1,5 @@
-﻿from datetime import datetime
+﻿import os
+from datetime import datetime
 import sqlite3 as sql
 import tensorflow as tf
 import numpy as np
@@ -36,24 +37,24 @@ def model(X, W, B, lstm_size) :
     # XT shape: (time_step_size, batch_size, input_vec_size)
     XR = tf.reshape(XT, [-1, lstm_size]) # each row has input for each lstm cell (lstm_size=input_vec_size)
     # XR shape: (time_step_size * batch_size, input_vec_size) 
-    X_split = tf.split(0, time_step_size, XR) # split them to time_step_size (60 arrays)
+    X_split = tf.split(XR, time_step_size, 0) # split them to time_step_size (60 arrays)
     # Each array shape: (batch_size, input_vec_size)
 
     # Make lstm with lstm_size (each input vector size)
-    cell = tf.nn.rnn_cell.GRUCell(lstm_size)
-    cell = tf.nn.rnn_cell.DropoutWrapper(cell = cell, output_keep_prob = 0.5)
-    cell = tf.nn.rnn_cell.MultiRNNCell([cell] * lstm_depth, state_is_tuple = True)
+    cell = tf.contrib.rnn.GRUCell(lstm_size)
+    cell = tf.contrib.rnn.DropoutWrapper(cell = cell, output_keep_prob = 0.5)
+    cell = tf.contrib.rnn.MultiRNNCell([cell] * lstm_depth, state_is_tuple = True)
 
     # Get lstm cell output, time_step_size (60) arrays with lstm_size output: (batch_size, lstm_size)
-    outputs, _states = tf.nn.rnn(cell, X_split, dtype=tf.float32)
+    outputs, _states = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)
 
     # Linear activation
     # Get the last output
-    return tf.matmul(outputs[-1], W) + B, cell.state_size # State size to initialize the stat
+    return tf.matmul(tf.transpose(outputs, [1, 0, 2])[-1], W) + B, cell.state_size # State size to initialize the stat
 
 
 def get_code_dates() :
-    conn = sql.connect("../../databases/finance_learning.db")
+    conn = sql.connect(os.path.dirname(__file__) + "../../databases/finance_learning.db")
     with conn :
         cursor = conn.cursor()
         cursor.execute("SELECT DISTINCT code FROM stock_daily_series")
@@ -147,10 +148,6 @@ Y = tf.placeholder(tf.float32, [None, label_size], name="output")
 # get lstm_size and output 3 labels
 W = tf.Variable(tf.random_normal([lstm_size, label_size], stddev=0.1), name="weights")
 B = tf.Variable(tf.random_normal([label_size], stddev=0.1), name="biases")
-
-W_hist = tf.histogram_summary("weights", W)
-B_hist = tf.histogram_summary("biases", B)
-Y_hist = tf.histogram_summary("output", Y)
 
 py_x, state_size = model(X, W, B, lstm_size)
 
